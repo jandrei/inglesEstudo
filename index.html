@@ -24,66 +24,70 @@
 		src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"
 		integrity="sha384-u/bQvRA/1bobcXlcEYpsEdFVK/vJs3+T+nXLsBYJthmdBuavHvAW6UsmqO2Gd/F9"
 		crossorigin="anonymous"></script>
-		
+
 	<script>
-		$(document).ready(
-				function() {
-					var arrayEn;
-					var arrayPt;
-					var idMovie = "5MgBikgcWnY";
 
-					loadSubtitles(idMovie, "en", function(array) {
-						arrayEn = array;
+		var arrayEn = [];
+		var arrayPt = [];
 
-						loadSubtitles(idMovie, "pt", function(array) {
-							arrayPt = array;
+		$(document).ready(function() {
+			var idMovie = "LVgzOyHVcj4";
 
-							console.log(arrayEn)
-							console.log(arrayPt)
+			loadSubtitles(idMovie, "en", function(array1) {
+				arrayEn = array1;
+				carrega();
+			});
 
-							//legends-td
-							var htmlTD = "<table  class='table table-striped'>";
-							for (var i = 0; i < arrayEn.length; i++) {
-								htmlTD += "<tr style='space'><td>" + arrayEn[i] +"<br>";
-								htmlTD += arrayPt[i]+ "</td></tr>";
-							}
+			loadSubtitles(idMovie, "pt", function(array2) {
+				arrayPt = array2;
+				carrega();
+			});
 
-							htmlTD += "</table>"
+			var urlMovie = "https://www.youtube.com/embed/" + idMovie;
+			
+			$('#iframeMovie').attr('src', urlMovie);
+		});
 
-							$('#legends-td').html(htmlTD);
-						});
-					});
+		function carrega(){
+			//legends-td
+			var htmlTD = "<table  class='table table-striped'>";
+			for (var i = 0; i < arrayEn.length; i++) {
+				htmlTD += "<tr style='space'><td>";
+				htmlTD += arrayEn[i] +"<br>";
+				
+				if (arrayPt.length >0){
+					htmlTD += arrayPt[i];
+				}
+				
+				htmlTD += "</td></tr>";
+			}
 
-					var urlMovie = "https://www.youtube.com/embed/" + idMovie;
-					$('#iframeMovie').attr('src', urlMovie);
-				});
+			htmlTD += "</table>"
+
+			$('#legends-td').html(htmlTD);
+		}
 
 		function loadSubtitles(idMovie, language, callback) {
-			$.ajax(
-					{
-						type : "POST",
-						url : "https://video.google.com/timedtext?lang="
-								+ language + "&v=" + idMovie
-					}).done(function(response) {
-
-				console.log(response);
-				console.log(response.toString());
-
-				var subtitles = response.getElementsByTagName("text");
-
+			$.ajax({	type : "POST", url : "https://video.google.com/timedtext?lang=" + language + "&v=" + idMovie })
+			.done(function(response) {
 				var array = [];
+				var subtitles = [];
 
-				$(subtitles).each(function(index) {
-					//console.log( index + ": " + $( this ).text() );
-					array.push($(this).text());
-				});
-
+				if (!response || response == ""){
+					console.log("sem subtitulos")
+				}else{
+					subtitles = response.getElementsByTagName("text");
+					$(subtitles).each(function(index) {
+						array.push($(this).text());
+					});
+				}
+				
 				if (callback) {
 					callback(array);
 				}
 
 			}).fail(function(response) {
-				console.log();
+				console.log("buu");
 			});
 		}
 	</script>
@@ -107,17 +111,16 @@ tr {
 	margin-top: 10px;
 }
 
-.scroll{
+.scroll {
 	width: 100%;
 	overflow-y: scroll;
 }
-
 </style>
 	<table
 		id="body"
 		class="table">
 		<tr>
-			<td id="movie-td" ><iframe
+			<td id="movie-td"><iframe
 					id="iframeMovie"
 					width="420"
 					height="315"> </iframe></td>
