@@ -1,0 +1,129 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Demo</title>
+</head>
+<body>
+	<a href="http://jquery.com/">jQuery</a>
+	<script
+		src="https://code.jquery.com/jquery-3.3.1.js"
+		integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+		crossorigin="anonymous"></script>
+
+	<link
+		href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+		rel="stylesheet"
+		integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+		crossorigin="anonymous">
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
+		integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"
+		integrity="sha384-u/bQvRA/1bobcXlcEYpsEdFVK/vJs3+T+nXLsBYJthmdBuavHvAW6UsmqO2Gd/F9"
+		crossorigin="anonymous"></script>
+		
+	<script>
+		$(document).ready(
+				function() {
+					var arrayEn;
+					var arrayPt;
+					var idMovie = "5MgBikgcWnY";
+
+					loadSubtitles(idMovie, "en", function(array) {
+						arrayEn = array;
+
+						loadSubtitles(idMovie, "pt", function(array) {
+							arrayPt = array;
+
+							console.log(arrayEn)
+							console.log(arrayPt)
+
+							//legends-td
+							var htmlTD = "<table  class='table table-striped'>";
+							for (var i = 0; i < arrayEn.length; i++) {
+								htmlTD += "<tr style='space'><td>" + arrayEn[i] +"<br>";
+								htmlTD += arrayPt[i]+ "</td></tr>";
+							}
+
+							htmlTD += "</table>"
+
+							$('#legends-td').html(htmlTD);
+						});
+					});
+
+					var urlMovie = "https://www.youtube.com/embed/" + idMovie;
+					$('#iframeMovie').attr('src', urlMovie);
+				});
+
+		function loadSubtitles(idMovie, language, callback) {
+			$.ajax(
+					{
+						type : "POST",
+						url : "https://video.google.com/timedtext?lang="
+								+ language + "&v=" + idMovie
+					}).done(function(response) {
+
+				console.log(response);
+				console.log(response.toString());
+
+				var subtitles = response.getElementsByTagName("text");
+
+				var array = [];
+
+				$(subtitles).each(function(index) {
+					//console.log( index + ": " + $( this ).text() );
+					array.push($(this).text());
+				});
+
+				if (callback) {
+					callback(array);
+				}
+
+			}).fail(function(response) {
+				console.log();
+			});
+		}
+	</script>
+
+	<style>
+.table {
+	border: 1px solid black;
+	width: 100%;
+	height: 100%
+}
+
+td {
+	vertical-align: top;
+}
+
+tr {
+	border: 15px;
+}
+
+.space {
+	margin-top: 10px;
+}
+
+.scroll{
+	width: 100%;
+	overflow-y: scroll;
+}
+
+</style>
+	<table
+		id="body"
+		class="table">
+		<tr>
+			<td id="movie-td" ><iframe
+					id="iframeMovie"
+					width="420"
+					height="315"> </iframe></td>
+
+			<td id="legends-td"></td>
+		</tr>
+	</table>
+</body>
+</html>
