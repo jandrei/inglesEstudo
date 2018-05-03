@@ -13,7 +13,6 @@
 
 	<style>
 		.table {
-			border: 1px solid black;
 			width: 100%;
 			height: 100%
 		}
@@ -28,11 +27,6 @@
 
 		.space {
 			margin-top: 10px;
-		}
-
-		.scroll {
-			width: 100%;
-			overflow-y: scroll;
 		}
 	</style>
 	<table id="body" class="table">
@@ -56,7 +50,6 @@
 
 		var arrayEn = [];
 		var arrayPt = [];
-
 		var subtitles = {};
 
 		$(document).ready(function () {
@@ -64,14 +57,13 @@
 
 			loadSubtitles(idMovie, "en", function (array1) {
 				subtitles['en'] = array1;
-
-				loadSubtitles(idMovie, "pt", function (array2) {
-					subtitles['pt'] = array2;
-					carrega();
-				});
+				carrega();
 			});
 
-
+			loadSubtitles(idMovie, "pt", function (array2) {
+				subtitles['pt'] = array2;
+				carrega();
+			});
 
 			var urlMovie = "https://www.youtube.com/embed/" + idMovie;
 
@@ -79,16 +71,11 @@
 		});
 
 		function carrega() {
-
 			var html = "<table><tr>";
-
-
 			for (var key in subtitles) {
 				var array = subtitles[key];
-
 				html += "<td>" + key + "<table  class='table table-striped'>";
 				html += "<tr style='space'>";
-
 				for (var i = 0; i < array.length; i++) {
 					html += "<tr><td>" + array[i] + "</td></tr>";
 				}
