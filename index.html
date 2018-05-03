@@ -1,132 +1,128 @@
 <!doctype html>
 <html>
-<head>
-<meta charset="utf-8">
-<title>Demo</title>
-</head>
-<body>
-	<a href="http://jquery.com/">jQuery</a>
-	<script
-		src="https://code.jquery.com/jquery-3.3.1.js"
-		integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
-		crossorigin="anonymous"></script>
 
-	<link
-		href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
-		rel="stylesheet"
-		integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
-		crossorigin="anonymous">
-	<script
-		src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
-		integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
-		crossorigin="anonymous"></script>
-	<script
-		src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"
-		integrity="sha384-u/bQvRA/1bobcXlcEYpsEdFVK/vJs3+T+nXLsBYJthmdBuavHvAW6UsmqO2Gd/F9"
-		crossorigin="anonymous"></script>
+<head>
+	<meta charset="utf-8">
+	<title>Demo</title>
+
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+	 crossorigin="anonymous">
+</head>
+
+<body>
+
+	<style>
+		.table {
+			border: 1px solid black;
+			width: 100%;
+			height: 100%
+		}
+
+		td {
+			vertical-align: top;
+		}
+
+		tr {
+			border: 15px;
+		}
+
+		.space {
+			margin-top: 10px;
+		}
+
+		.scroll {
+			width: 100%;
+			overflow-y: scroll;
+		}
+	</style>
+	<table id="body" class="table">
+		<tr>
+			<td id="movie-td">
+				<iframe id="iframeMovie" width="420" height="315"> </iframe>
+			</td>
+
+			<td id="legends-td"></td>
+		</tr>
+	</table>
+
+	<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+	 crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js" integrity="sha384-u/bQvRA/1bobcXlcEYpsEdFVK/vJs3+T+nXLsBYJthmdBuavHvAW6UsmqO2Gd/F9"
+	 crossorigin="anonymous"></script>
 
 	<script>
 
 		var arrayEn = [];
 		var arrayPt = [];
 
-		$(document).ready(function() {
+		var subtitles = {};
+
+		$(document).ready(function () {
 			var idMovie = "5MgBikgcWnY";
 
-			loadSubtitles(idMovie, "en", function(array1) {
-				arrayEn = array1;
-				carrega();
+			loadSubtitles(idMovie, "en", function (array1) {
+				subtitles['en'] = array1;
+
+				loadSubtitles(idMovie, "pt", function (array2) {
+					subtitles['pt'] = array2;
+					carrega();
+				});
 			});
 
-			loadSubtitles(idMovie, "pt", function(array2) {
-				arrayPt = array2;
-				carrega();
-			});
+
 
 			var urlMovie = "https://www.youtube.com/embed/" + idMovie;
-			
+
 			$('#iframeMovie').attr('src', urlMovie);
 		});
 
-		function carrega(){
-			//legends-td
-			var htmlTD = "<table  class='table table-striped'>";
-			for (var i = 0; i < arrayEn.length; i++) {
-				htmlTD += "<tr style='space'><td>";
-				htmlTD += arrayEn[i] +"<br>";
-				
-				if (arrayPt.length >0){
-					htmlTD += arrayPt[i];
+		function carrega() {
+
+			var html = "<table><tr>";
+
+
+			for (var key in subtitles) {
+				var array = subtitles[key];
+
+				html += "<td>" + key + "<table  class='table table-striped'>";
+				html += "<tr style='space'>";
+
+				for (var i = 0; i < array.length; i++) {
+					html += "<tr><td>" + array[i] + "</td></tr>";
 				}
-				
-				htmlTD += "</td></tr>";
+				html += "</table></td>"
 			}
+			html += "</tr></table>"
 
-			htmlTD += "</table>"
-
-			$('#legends-td').html(htmlTD);
+			$('#legends-td').html(html);
 		}
 
 		function loadSubtitles(idMovie, language, callback) {
-			$.ajax({	type : "POST", url : "https://video.google.com/timedtext?lang=" + language + "&v=" + idMovie })
-			.done(function(response) {
-				var array = [];
-				var subtitles = [];
+			$.ajax({ type: "POST", url: "https://video.google.com/timedtext?lang=" + language + "&v=" + idMovie })
+				.done(function (response) {
+					var array = [];
+					var subtitlesLocal = [];
 
-				if (!response || response == ""){
-					console.log("sem subtitulos")
-				}else{
-					subtitles = response.getElementsByTagName("text");
-					$(subtitles).each(function(index) {
-						array.push($(this).text());
-					});
-				}
-				
-				if (callback) {
-					callback(array);
-				}
+					if (!response || response == "") {
+						console.log("sem subtitulos")
+					} else {
+						subtitlesLocal = response.getElementsByTagName("text");
+						$(subtitlesLocal).each(function (index) {
+							array.push($(this).text());
+						});
+					}
 
-			}).fail(function(response) {
-				console.log("buu");
-			});
+					if (callback) {
+						callback(array);
+					}
+				}).fail(function (response) {
+					console.log("buu");
+				});
 		}
 	</script>
 
-	<style>
-.table {
-	border: 1px solid black;
-	width: 100%;
-	height: 100%
-}
-
-td {
-	vertical-align: top;
-}
-
-tr {
-	border: 15px;
-}
-
-.space {
-	margin-top: 10px;
-}
-
-.scroll {
-	width: 100%;
-	overflow-y: scroll;
-}
-</style>
-	<table
-		id="body"
-		class="table">
-		<tr>
-			<td id="movie-td"><iframe
-					id="iframeMovie"
-					width="420"
-					height="315"> </iframe></td>
-
-			<td id="legends-td"></td>
-		</tr>
-	</table>
 </body>
+
 </html>
