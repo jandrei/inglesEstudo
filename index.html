@@ -71,18 +71,38 @@
 		});
 
 		function carrega() {
-			var html = "<table><tr>";
-			for (var key in subtitles) {
-				var array = subtitles[key];
-				html += "<td>" + key + "<table  class='table table-striped'>";
-				html += "<tr style='space'>";
-				for (var i = 0; i < array.length; i++) {
-					html += "<tr><td>" + array[i] + "</td></tr>";
-				}
-				html += "</table></td>"
-			}
-			html += "</tr></table>"
+			/*			var html = "<table><tr>";
+						for (var key in subtitles) {
+							var array = subtitles[key];
+							html += "<td>" + key + "<table  class='table table-striped'>";
+							html += "<tr style='space'>";
+							for (var i = 0; i < array.length; i++) {
+								html += "<tr><td>" + array[i] + "</td></tr>";
+							}
+							html += "</table></td>"
+						}
+						html += "</tr></table>"
+			*/
 
+			var html = "<table>";
+			var conta = 0;
+			var contaArray = 0;
+			for (var key in subtitles) {
+				conta++;
+				var len = subtitles[key].length;
+				contaArray = (len > contaArray ? len : contaArray);
+			}
+
+			for (var i = 0; i < contaArray; i++) {
+				html += "<tr>";
+				for (var key in subtitles) {
+					var ar = subtitles[key];
+					html += "<td>"+ar[i]+"</td>";
+				}
+				html += "<tr>";
+			}
+
+			html += "</table>"
 			$('#legends-td').html(html);
 		}
 
