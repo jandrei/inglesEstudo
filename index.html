@@ -121,10 +121,10 @@
 				listaURLS = [];
 				listaURLS.push("https://www.youtube.com/watch?v=VO6XEQIsCoM");
 				listaURLS.push("https://www.youtube.com/watch?v=RKK7wGAYP6k");
-				
-				localStorage.setItem("listaURLS",JSON.stringify(listaURLS));
+
+				localStorage.setItem("listaURLS", JSON.stringify(listaURLS));
 				listaURLS = localStorage.getItem("listaURLS");
-			} 
+			}
 
 			listaURLS = JSON.parse(listaURLS);
 			var url = listaURLS[0];
@@ -133,7 +133,7 @@
 			var urlEmbed = "https://www.youtube.com/embed/" + idMovie;
 			$('#iframeMovie').attr('src', urlEmbed);
 
-			
+
 
 			loadSubtitles(idMovie, "en", function (array1) {
 				subtitles['en'] = array1;
@@ -144,14 +144,14 @@
 				subtitles['pt'] = array2;
 				carrega();
 			});
-		
+
 			carregaListaURLS()
 		});
 
 		function acaoDefault() {
 			var idMovie = "5MgBikgcWnY";
 
-			
+
 			loadSubtitles(idMovie, "en", function (array1) {
 				//console.log(array1)
 				subtitles['en'] = array1;
@@ -239,7 +239,7 @@
 
 			var urlEmbed = "https://www.youtube.com/embed/" + idMovie;
 
-			
+
 
 			loadSubtitles(idMovie, "en", function (array1) {
 				subtitles['en'] = array1;
@@ -255,13 +255,13 @@
 
 			carregaListaURLS();
 		}
-		
+
 		function selecionaURL(url) {
 			var idMovie = getParameterByName('v', url);
 			var urlEmbed = "https://www.youtube.com/embed/" + idMovie;
 
 			// console.log("teste")
-		
+
 			loadSubtitles(idMovie, "en", function (array1) {
 				subtitles['en'] = array1;
 				carrega();
@@ -329,10 +329,10 @@
 				excluiItem($(this).attr("language"), $(this).attr("indice"))
 			})
 		}
-		
+
 		function loadSubtitles(idMovie, language, callback) {
 			subtitles = {};
-			$('#legends-td').html('');	
+			$('#legends-td').html('');
 
 			$.ajax({ type: "POST", url: "https://video.google.com/timedtext?lang=" + language + "&v=" + idMovie })
 				.done(function (response) {
@@ -355,6 +355,16 @@
 					console.log(JSON.stringify(response));
 				});
 		}
+	</script>
+
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-118754033-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() { dataLayer.push(arguments); }
+		gtag('js', new Date());
+
+		gtag('config', 'UA-118754033-1');
 	</script>
 
 </body>
