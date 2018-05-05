@@ -205,12 +205,11 @@
 
 				carregaListaURLS();
 			}
-			ga('send', {
-				hitType: 'event',
-				eventCategory: 'ExcluirLinkLocalStorage',
-				eventAction: 'delLink',
-				eventLabel: 'Excluir link do local storage'
-			});
+
+
+			var buttonText = jQuery(this).text();
+			// This function reports an event to Google Analytics servers.
+			ga('send', 'event', 'Excluir link do local storage', 'click', buttonText);
 		}
 
 		function adicionarURL() {
@@ -260,12 +259,10 @@
 
 			carregaListaURLS();
 
-			ga('send', {
-				hitType: 'event',
-				eventCategory: 'adicionarURL',
-				eventAction: 'add',
-				eventLabel: 'Adicionar URL'
-			});
+			
+			var buttonText = jQuery(this).text();
+			// This function reports an event to Google Analytics servers.
+			ga('send', 'event', 'Adicionar URL', 'click', buttonText);
 		}
 
 		function selecionaURL(url) {
@@ -288,12 +285,9 @@
 
 			carregaListaURLS();
 
-			ga('send', {
-				hitType: 'event',
-				eventCategory: 'selecionaURLLocalStorage',
-				eventAction: 'seleciona',
-				eventLabel: 'Seleciona URL do LocalStorage'
-			});
+			var buttonText = jQuery(this).text();
+			// This function reports an event to Google Analytics servers.
+			ga('send', 'event', 'Seleciona URL do LocalStorage', 'click', buttonText);
 		}
 
 		function getParameterByName(name, url) {
@@ -313,12 +307,10 @@
 			subtitles[language].splice(indice, 1);
 			carrega();
 
-			ga('send', {
-				hitType: 'event',
-				eventCategory: 'ExcluirItemLegenda',
-				eventAction: 'del',
-				eventLabel: 'Remover Item da Legenda'
-			});
+			var buttonText = jQuery(this).text();
+			// This function reports an event to Google Analytics servers.
+			ga('send', 'event', 'Remover Item da Legenda', 'click', buttonText);
+
 		}
 
 		function carrega() {
