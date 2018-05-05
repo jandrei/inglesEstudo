@@ -118,27 +118,33 @@
 
 			var listaURLS = localStorage.getItem("listaURLS");
 			if (listaURLS == null) {
-				acaoDefault();
-			} else {
-				listaURLS = JSON.parse(listaURLS);
-				var url = listaURLS[0];
-
-				var idMovie = getParameterByName('v', url);
-				var urlEmbed = "https://www.youtube.com/embed/" + idMovie;
-				$('#iframeMovie').attr('src', urlEmbed);
-
+				listaURLS = [];
+				listaURLS.push("https://www.youtube.com/watch?v=VO6XEQIsCoM");
+				listaURLS.push("https://www.youtube.com/watch?v=RKK7wGAYP6k");
 				
+				localStorage.setItem("listaURLS",JSON.stringify(listaURLS));
+				listaURLS = localStorage.getItem("listaURLS");
+			} 
 
-				loadSubtitles(idMovie, "en", function (array1) {
-					subtitles['en'] = array1;
-					carrega();
-				});
+			listaURLS = JSON.parse(listaURLS);
+			var url = listaURLS[0];
 
-				loadSubtitles(idMovie, "pt", function (array2) {
-					subtitles['pt'] = array2;
-					carrega();
-				});
-			}
+			var idMovie = getParameterByName('v', url);
+			var urlEmbed = "https://www.youtube.com/embed/" + idMovie;
+			$('#iframeMovie').attr('src', urlEmbed);
+
+			
+
+			loadSubtitles(idMovie, "en", function (array1) {
+				subtitles['en'] = array1;
+				carrega();
+			});
+
+			loadSubtitles(idMovie, "pt", function (array2) {
+				subtitles['pt'] = array2;
+				carrega();
+			});
+		
 			carregaListaURLS()
 		});
 
