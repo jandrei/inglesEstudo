@@ -58,6 +58,12 @@
 								<h4 class="card-title">
 									<a href="#" id="language">Legendas</a>
 								</h4>
+								<small>
+									Pode acontecer que as legendas não estejam sincronizadas, 
+									utilize o "x" no fim da tradução para remover alguma mensagem e
+									facilitar o estudo.
+								</small>
+
 								<p class="card-text" id="legends-td">
 
 								</p>
@@ -101,20 +107,20 @@
 
 			// console.log("listaURLS")
 			// console.log(listaURLS)
-			
-			if (listaURLS == null){
+
+			if (listaURLS == null) {
 				acaoDefault();
-			}else{
+			} else {
 				listaURLS = JSON.parse(listaURLS);
 				var url = listaURLS[0];
-			
-				var idMovie = getParameterByName('v',url);
-				var urlEmbed = "https://www.youtube.com/embed/" + idMovie;	
-				$('#iframeMovie').attr('src', urlEmbed);	
+
+				var idMovie = getParameterByName('v', url);
+				var urlEmbed = "https://www.youtube.com/embed/" + idMovie;
+				$('#iframeMovie').attr('src', urlEmbed);
 				carrega();
 			}
 			carregaListaURLS()
-			
+
 			//acaoDefault();
 		});
 
@@ -178,6 +184,12 @@
 
 		function adicionarURL() {
 			var urlMovie = $('#url').val();
+			if (urlMovie == null || urlMovie == "") {
+				alert('Insira uma url do youtube válida, geralmente urls do canal TED possuem tranduções.')
+				return;
+			}
+			$('#url').val("");
+
 			var listaURLS = localStorage.getItem("listaURLS");
 			//alert(listaURLS);
 			if (listaURLS == null) {
@@ -189,9 +201,15 @@
 			if (listaURLS.length > 10) {
 				listaURLS = listaURLS.slice(0, 10);
 			}
+			var idMovie = getParameterByName('v', urlMovie);
+			if (idMovie == null || idMovie == "") {
+				alert("Essa url não é válida pois não possui o parâmetro 'v' que é o identificador único dos videos.")
+				return;
+			}
+
 			localStorage.setItem("listaURLS", JSON.stringify(listaURLS));
 
-			var idMovie = getParameterByName('v', urlMovie);
+
 			var urlEmbed = "https://www.youtube.com/embed/" + idMovie;
 
 			loadSubtitles(idMovie, "en", function (array1) {
