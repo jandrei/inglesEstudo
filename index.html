@@ -54,7 +54,7 @@
 					</div>
 					<div class="col-lg-8">
 						<div class="card h-100">
-							<div class="card-body">
+							<div class="card-body" style="overflow-y: scroll;">
 								<h4 class="card-title">
 									<a href="#" id="language">Legendas</a>
 								</h4>
@@ -63,9 +63,9 @@
 									facilitar o estudo.
 								</small>
 
-								<p class="card-text" id="legends-td">
+								<div class="card-text" id="legends-td">
 
-								</p>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -83,7 +83,7 @@
 	<!-- /.container -->
 
 	<!-- Footer -->
-	<footer class="py-5 bg-dark">
+	<footer class="py-2 bg-dark">
 		<div class="container">
 			<p class="m-0 text-center text-white">Copyright &copy; Jandrei Carlos Masiero</p>
 		</div>
@@ -100,8 +100,22 @@
 		var arrayEn = [];
 		var arrayPt = [];
 		var subtitles = {};
+		function ajustaBodyH() {
+			var h = $(window).height() - 50;
+			if (h < 200) {
+				h = 200;
+			}
 
+			$(".card-body").css("height", h);
+		}
+
+		$(window).resize(function () {
+			ajustaBodyH();
+		});
+		
 		$(document).ready(function () {
+			ajustaBodyH();
+
 			var listaURLS = localStorage.getItem("listaURLS");
 			if (listaURLS == null) {
 				acaoDefault();
@@ -112,7 +126,7 @@
 				var idMovie = getParameterByName('v', url);
 				var urlEmbed = "https://www.youtube.com/embed/" + idMovie;
 				$('#iframeMovie').attr('src', urlEmbed);
-				
+
 				loadSubtitles(idMovie, "en", function (array1) {
 					subtitles['en'] = array1;
 					carrega();
@@ -287,7 +301,7 @@
 					if (ar[i] == undefined) {
 						continue;
 					}
-					html += "<td>" + ar[i] + "</td><td><a style='color:#007bff; cursor:pointer;'class='item_legenda' language='"+key+"' indice='"+i+"' >X</a></td>";
+					html += "<td>" + ar[i] + "</td><td><a style='color:#007bff; cursor:pointer;'class='item_legenda' language='" + key + "' indice='" + i + "' >X</a></td>";
 				}
 				html += "</tr>";
 			}
@@ -299,8 +313,8 @@
 			$('#legends-td').html(html);
 
 
-			$('.item_legenda').click(function(){
-				excluiItem($(this).attr("language"),$(this).attr("indice"))
+			$('.item_legenda').click(function () {
+				excluiItem($(this).attr("language"), $(this).attr("indice"))
 			})
 		}
 
