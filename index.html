@@ -205,11 +205,16 @@
 
 				carregaListaURLS();
 			}
-
-
+			ga('send', {
+				hitType: 'event',
+				eventCategory: 'ExcluirLinkLocalStorage',
+				eventAction: 'delLink',
+				eventLabel: 'Excluir link do local storage'
+			});
 		}
 
 		function adicionarURL() {
+
 			var urlMovie = $('#url').val();
 			if (urlMovie == null || urlMovie == "") {
 				alert('Insira uma url do youtube válida, geralmente urls do canal TED possuem tranduções.')
@@ -254,6 +259,13 @@
 			$('#iframeMovie').attr('src', urlEmbed);
 
 			carregaListaURLS();
+
+			ga('send', {
+				hitType: 'event',
+				eventCategory: 'adicionarURL',
+				eventAction: 'add',
+				eventLabel: 'Adicionar URL'
+			});
 		}
 
 		function selecionaURL(url) {
@@ -275,6 +287,13 @@
 			$('#iframeMovie').attr('src', urlEmbed);
 
 			carregaListaURLS();
+
+			ga('send', {
+				hitType: 'event',
+				eventCategory: 'selecionaURLLocalStorage',
+				eventAction: 'seleciona',
+				eventLabel: 'Seleciona URL do LocalStorage'
+			});
 		}
 
 		function getParameterByName(name, url) {
@@ -293,6 +312,13 @@
 			// console.log(indice);
 			subtitles[language].splice(indice, 1);
 			carrega();
+
+			ga('send', {
+				hitType: 'event',
+				eventCategory: 'ExcluirItemLegenda',
+				eventAction: 'del',
+				eventLabel: 'Remover Item da Legenda'
+			});
 		}
 
 		function carrega() {
